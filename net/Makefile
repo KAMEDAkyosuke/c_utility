@@ -3,14 +3,18 @@ CFLAGS    += --std=c99 -Wall -Wextra -Wno-unused-parameter -Wno-unused-function 
 LDFLAGS   += 
 INCLUDES  +=
 LDLIBS    += 
-SRCS       = socketlist.c
+SRCS       = net.c
 OBJS       = $(SRCS:.c=.o)
+TARGETS    = main
 
 SUBDIRS   += 
 
-all: $(OBJS)
+all: $(OBJS) $(SUBDIRS)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
+
+$(SUBDIRS):
+	$(MAKE) -C $@
 
 .PHONY: clean
 clean:
@@ -23,8 +27,3 @@ clean:
 check-syntax:
 	$(CC) $(CFLAGS) -fsyntax-only $(CHK_SOURCES)
 
-.PHONY: all $(SUBDIRS)
-
-all: $(SUBDIRS)
-$(SUBDIRS):
-	$(MAKE) -C $@
