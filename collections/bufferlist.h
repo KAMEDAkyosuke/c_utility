@@ -17,6 +17,10 @@ typedef struct bufferlist_t{
 bufferlist_t* bufferlist_append(bufferlist_t* list, uint8_t* buf, ssize_t len);
 void bufferlist_free(bufferlist_t* list);
 
+ssize_t bufferlist_len(bufferlist_t* list);
+uint8_t* bufferlist_concat(bufferlist_t* list);
+void bufferlist_concat_free(uint8_t* buf);
+
 #ifdef __cplusplus
 }
 #endif

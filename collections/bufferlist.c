@@ -36,3 +36,40 @@ void bufferlist_free(bufferlist_t* list)
         tmp = NULL;
     }
 }
+
+ssize_t bufferlist_len(bufferlist_t* list)
+{
+    ssize_t len = 0;
+    bufferlist_t *current = list;
+    while(current != NULL){
+        len += current->len;
+        current = current->next;
+    }
+    return len;
+}
+
+uint8_t* bufferlist_concat(bufferlist_t* list)
+{
+    uint8_t* r = NULL;
+    ssize_t len = bufferlist_len(list);
+    if(len == 0){
+        return r;
+    }
+    else{
+        r = (uint8_t*) malloc(sizeof(uint8_t) * len + 1);
+        uint8_t* p = r;
+        bufferlist_t *current = list;
+        while(current != NULL){
+            memcpy(p, current->buffer, current->len);
+            p += current->len;
+            current = current->next;
+        }
+        r[len] = '\0';
+    }
+    return r;
+}
+
+void bufferlist_concat_free(uint8_t* buf)
+{
+    free(buf);
+}

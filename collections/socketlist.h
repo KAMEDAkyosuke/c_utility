@@ -7,16 +7,23 @@ extern "C" {
 
 #include <stdbool.h>
 
+typedef enum {
+    SOCKETLIST_OPENED = 0,
+    SOCKETLIST_CAN_CLOSE,
+    SOCKETLIST_CLOSED,
+} soketlist_status;
+
 typedef struct socketlist{
     struct socketlist* next;
     int socket;
-    bool is_closed;
+    soketlist_status status;
+    void* data;
+    void(*data_destructor)(void* data);
 } socketlist_t;
 
-socketlist_t* socketlist_append(socketlist_t* list, int socket);
+socketlist_t* socketlist_append(socketlist_t* list, int socket, void(*data_destructor)(void*));
 void socketlist_free(socketlist_t* list);
-socketlist_t* socketlist_delete(socketlist_t* list, socketlist_t* target);
-socketlist_t* socketlist_delete_closed_socket(socketlist_t* list);
+socketlist_t* socketlist_delete_can_close_sockets(socketlist_t* list);
 
 #ifdef __cplusplus
 }
