@@ -3,14 +3,16 @@ CFLAGS    += --std=c99 -Wall -Wextra -Wno-unused-parameter -Wno-unused-function 
 LDFLAGS   += 
 INCLUDES  +=
 LDLIBS    += 
-SRCS       = socketlist.c
+SRCS       = socketlist.c bufferlist.c
 OBJS       = $(SRCS:.c=.o)
 
 SUBDIRS   += 
 
-all: $(OBJS)
-%.o: %.c
-	$(CC) $(CFLAGS) -c $<
+all:
+	@for src in $(SRCS) ; do \
+		($(CC) $(CFLAGS) -c $$src) ; \
+	done
+
 
 .PHONY: clean
 clean:
@@ -22,9 +24,3 @@ clean:
 .PHONY: check-syntax
 check-syntax:
 	$(CC) $(CFLAGS) -fsyntax-only $(CHK_SOURCES)
-
-.PHONY: all $(SUBDIRS)
-
-all: $(SUBDIRS)
-$(SUBDIRS):
-	$(MAKE) -C $@
